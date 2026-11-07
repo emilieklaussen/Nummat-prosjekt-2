@@ -251,3 +251,48 @@ Personnavn er brukt i stedet for metodenavn som `_boris`, fordi Emilie allerede 
 ## 6. Ikke gjort, ifølge valg A
 
 Funksjonene som er definert flere ganger, er *ikke* slått sammen. Det gjelder modellproblemene (tre versjoner), høyresiden av ODE-en (`ODEs_emilie`, `ODEs_amanda`, `ODE1`), referanseløsningene, energifunksjonene, de to RK4-implementeringene (`RK4_amanda` og `RK4_seline`) og Amandas doble work-precision-plott.
+
+---
+
+# Branch `FirstGenChange`: felles funksjoner og farger
+
+Disse endringene finnes bare i branchen `FirstGenChange`, ikke på `main`.
+
+## A. Én felles versjon av modellproblemene, ODE-en og energien
+
+I seksjon 2 (Modellproblemer) står det nå to celler som alle tre bruker:
+
+1. **Felles modellproblemer:** `B_2D`, `A_2D`, `U_2D`, `grad_U_2D`, `x0_2D`, `v0_2D`, `B_tokamak`, `A_tokamak`, `U_tokamak`, `grad_U_tokamak`, `x0_tokamak` og `v0_tokamak`.
+2. **Felles funksjoner:** `ODEs(t, y, B, grad_U)`, `energy(x, v, U)` og `energy_change(x, v, U)`.
+
+**Disse er fjernet og erstattet med de felles versjonene:**
+
+| Hvem | Fjernet | Erstattet med |
+|---|---|---|
+| Emilie | `B_2D_emilie`, `A_2D_emilie`, `U_2D_emilie`, `grad_U_2D_emilie`, `x0_2D_emilie`, `v0_2D_emilie`, `B_tokamak_emilie`, `A_tokamak_emilie`, `U_tokamak_emilie`, `grad_U_tokamak_emilie`, `x0_tokomak`, `v0_tokomak` | de felles navnene uten endelse |
+| Emilie | `ODEs_emilie(t, y, B, U, Ugrad)` | `ODEs(t, y, B, grad_U)`. U-argumentet ble aldri brukt, så `args=(B, U, grad_U)` i `solve_ivp` er endret til `args=(B, grad_U)`, også inne i `boris_method`. |
+| Amanda | Hele tokamak-cellen, i tillegg til `B_2D_amanda`, `A_2D_amanda`, `U_2D_amanda`, `grad_U_2D_amanda`, `B_2D_np`, `grad_U_2D_np`, `B_tokamak_np`, `x0_2D_amanda`, `v0_2D_amanda` og markdown-cellen «Model problems» | de felles navnene. `_np`-funksjonene var kopier og ble ikke brukt. |
+| Amanda | `ODEs_amanda` | `ODEs` (identisk) |
+| Seline | `B1`, `A1`, `U1`, `U_grad1`, `x01`, `v01`, `B2`, `A2`, `U2`, `U_grad2`, `x02`, `v02` | de felles navnene. `y01` og `y02` finnes fortsatt, men lages nå fra `x0_2D`/`v0_2D` og `x0_tokamak`/`v0_tokamak`. |
+| Seline | `ODE1` | `ODEs` (identisk) |
+| Seline | `energy_seline`, `energy_change` (flyttet) | `energy`, `energy_change` i fellescellen |
+| Amanda | `energy_amanda(y, U)` | `energy(x, v, U)`. `E0_2D`, `E0_tokamak`, `e_n_2D` og `e_n_tokamak` regnes ut som før, bare med den felles funksjonen. |
+| Emilie | Energiformelen inne i `energy_change_boris` | `energy(...)`. Selve `energy_change_boris` er beholdt, fordi Boris har v på halve steg og trenger egen behandling. |
+
+**Merk:** `A_tokamak` bruker nå `arctan2(x[1], x[0])`, slik Seline gjorde. Emilie og Amanda brukte `arctan(x[1]/x[0])`, som gir feil verdi når x[0] < 0. A brukes bare av FOSMM, så dette endrer ingen resultater for Boris og RK4.
+
+**Ikke slått sammen:** referanseløsningene, fordi de har ulike toleranser og sluttider, og en sammenslåing ville endret resultatene. Det samme gjelder Selines egen RK4 (`RK4_seline`, merket «slett etterpå») og feilfunksjonene.
+
+## B. Farger
+
+| Metode | Farger |
+|---|---|
+| Boris (Emilie) | blå: `cornflowerblue` (2D), `royalblue` (Tokamak), `steelblue` (R–x₃-plott), `navy` (referanselinje) |
+| RK4 (Amanda og Selines RK4) | lilla: `mediumorchid` (2D), `darkviolet` (Tokamak), `mediumpurple` (R–x₃-plott), `rebeccapurple` (referanselinje), `mediumvioletred` (2D i work-precision, som før) |
+| FOSMM (Seline) | grønn: `mediumseagreen` (2D), `darkgreen` (Tokamak), `seagreen` (R–z-plott og x₂-komponent), `olivedrab` (referanse- og teorilinje) |
+
+I sammenligningsplottet FOSMM/RK4 er FOSMM-kurvene grønne og RK4-kurvene lilla.
+
+## C. Testing
+
+Notebooken er kjørt med kortere sluttid T og sammenlignet med versjonen på `main`. 90 av 91 resultatvariabler er bitvis identiske. Den siste, `energy_change_boris_toko`, avviker med 8·10⁻²², som er ren avrunding.
