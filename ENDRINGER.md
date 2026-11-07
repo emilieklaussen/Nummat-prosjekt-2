@@ -1,6 +1,6 @@
 # Endringer i `prosjekt2_sortert.ipynb`
 
-`prosjekt2_sortert.ipynb` er en sortert kopi av `prosjekt2_samlet.ipynb`. Originalfilen er ikke endret.
+`prosjekt2_sortert.ipynb` er en sortert kopi av `prosjekt2_samlet.ipynb`.
 
 **Ingen logikk er endret.** Det eneste som er gjort, er:
 1. cellene er flyttet slik at like resultater står samlet,
@@ -8,6 +8,15 @@
 3. det er lagt til markdown-overskrifter, og de tre gamle navneoverskriftene er fjernet.
 
 All kode, alle kommentarer og alt output er ellers som før.
+
+## Oppdatering: Amandas nye RK4 (bare numpy)
+
+Amandas commit «ny rk4 bare med numpy» er lagt inn. Hennes 25 celler i `prosjekt2_samlet.ipynb` er byttet ut med cellene fra den nye `RK4.ipynb`, og cellene har samme plass i den sorterte filen som før, siden de svarer én-til-én til de gamle. Hva som er nytt hos Amanda:
+- Modellfunksjonene og `ODEs` bruker numpy i stedet for JAX, og `@jax.jit` er fjernet.
+- `RK4_jit` heter nå `RK4`.
+- `ODEs_scipy` er fjernet, og `solve_ivp` bruker `ODEs` og `B_2D`, `grad_U_2D`, `B_tokamak` direkte.
+
+Amandas nye funksjonsnavn `RK4` kolliderte med Selines `RK4`. Begge har derfor fått endelse: `RK4_amanda` og `RK4_seline`. Se tabellene under.
 
 ## 1. Ny rekkefølge
 
@@ -28,8 +37,8 @@ All kode, alle kommentarer og alt output er ellers som før.
   - kode: `#Tokamak magentic field`
 - *Amanda (RK4)*
   - markdown: `#### Model problems`
-  - kode: `#2D charged particle`
-  - kode: `#Tokamak magentic field`
+  - kode: `# 2D charged particle`
+  - kode: `# Tokamak magnetic field`
 
 **3. Implementering av metodene**
 
@@ -136,7 +145,7 @@ All kode, alle kommentarer og alt output er ellers som før.
   - kode: `TRK = 1e4`
   - markdown: `since the plots of the error have a steeper slope than the h**4 plo...`
 
-Seline sine RK4-celler (merket «slett etterpå») er fordelt på seksjon 4–7 etter hva de viser, under overskriften «Seline (RK4)».
+Selines RK4-celler (merket «slett etterpå») er fordelt på seksjon 4–7 etter hva de viser, under overskriften «Seline (RK4)».
 
 ## 2. Nye og fjernede markdown-celler
 
@@ -147,7 +156,7 @@ Seline sine RK4-celler (merket «slett etterpå») er fordelt på seksjon 4–7 
 
 Navnene fikk endelsen `_emilie`, `_amanda` eller `_seline` i alle celler som tilhører den personen. Det gjelder både definisjonen og alle steder navnet brukes. Navn på keyword-argumenter, som `t_eval=` i `solve_ivp`, er *ikke* endret, bare verdiene som sendes inn. Lokale variabler og parametre inne i funksjoner med samme navn har også fått endelsen. Det endrer ikke hva funksjonene gjør.
 
-I forrige melding foreslo jeg endelser som `_boris`, `_rk4` og `_fosmm`. Jeg brukte personnavn i stedet, fordi Emilie allerede har en variabel som heter `t_eval_boris`, og fordi Seline har både FOSMM- og RK4-kode.
+Personnavn er brukt i stedet for metodenavn som `_boris`, fordi Emilie allerede har en variabel som heter `t_eval_boris`, og fordi Seline har både FOSMM- og RK4-kode.
 
 ### Emilie
 
@@ -180,18 +189,19 @@ I forrige melding foreslo jeg endelser som `_boris`, `_rk4` og `_fosmm`. Jeg bru
 
 | Gammelt navn | Nytt navn | Celler der navnet er endret (første linje i cellen) |
 |---|---|---|
-| `A_2D` | `A_2D_amanda` | `#2D charged particle` |
-| `A_tokamak` | `A_tokamak_amanda` | `#Tokamak magentic field` |
-| `B_2D` | `B_2D_amanda` | `#2D charged particle`; `# Parameters`; `#Paramaters` |
-| `B_tokamak` | `B_tokamak_amanda` | `#Tokamak magentic field`; `# Parameters`; `#Tokamak` |
-| `ODEs` | `ODEs_amanda` | `#defining the numerical approximation of the ` |
+| `A_2D` | `A_2D_amanda` | `# 2D charged particle` |
+| `A_tokamak` | `A_tokamak_amanda` | `# Tokamak magnetic field` |
+| `B_2D` | `B_2D_amanda` | `# 2D charged particle`; `# Parameters`; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Paramaters`; `#Solve_ivp for all three step sizes` |
+| `B_tokamak` | `B_tokamak_amanda` | `# Tokamak magnetic field`; `# Parameters`; `#Plotting the error over time for the RK4 met`; `#Tokamak`; `#Solve_ivp for all three step sizes` |
+| `ODEs` | `ODEs_amanda` | `#defining the numerical approximation of the `; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Solve_ivp for all three step sizes` |
+| `RK4` | `RK4_amanda` | `#defining the numerical approximation of the `; `# Parameters`; `# Parameters`; `#Paramaters`; `#Tokamak` |
 | `T` | `T_amanda` | `# Parameters`; `# Parameters`; `#Plotting the error over time for the RK4 met`; `#Paramaters`; `#Solve_ivp for all three step sizes` |
-| `U_2D` | `U_2D_amanda` | `#2D charged particle`; `#Plotting the change in energy againt time` |
-| `U_tokamak` | `U_tokamak_amanda` | `#Tokamak magentic field`; `#Plotting the change in energy againt time` |
+| `U_2D` | `U_2D_amanda` | `# 2D charged particle`; `#Plotting the change in energy againt time` |
+| `U_tokamak` | `U_tokamak_amanda` | `# Tokamak magnetic field`; `#Plotting the change in energy againt time` |
 | `energy` | `energy_amanda` | `#Plotting the change in energy againt time` |
 | `error_2D` | `error_2D_amanda` | `#Plotting the error over time for both 2D pat` |
-| `grad_U_2D` | `grad_U_2D_amanda` | `#2D charged particle`; `# Parameters`; `#Paramaters` |
-| `grad_U_tokamak` | `grad_U_tokamak_amanda` | `#Tokamak magentic field`; `# Parameters`; `#Plotting the error over time for the RK4 met`; `#Tokamak`; `#Solve_ivp for all three step sizes` |
+| `grad_U_2D` | `grad_U_2D_amanda` | `# 2D charged particle`; `# Parameters`; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Paramaters`; `#Solve_ivp for all three step sizes` |
+| `grad_U_tokamak` | `grad_U_tokamak_amanda` | `# Tokamak magnetic field`; `# Parameters`; `#Plotting the error over time for the RK4 met`; `#Tokamak`; `#Solve_ivp for all three step sizes` |
 | `h` | `h_amanda` | `#defining the numerical approximation of the `; `# Parameters`; `# Parameters`; `#Plotting the error over time for the RK4 met`; `#Paramaters` |
 | `h_i` | `h_i_amanda` | `#Paramaters`; `#Tokamak`; `#Solve_ivp for all three step sizes`; `#Comuting the error in the last step` |
 | `initial_condition_2D` | `initial_condition_2D_amanda` | `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Plotting the change in energy againt time`; `#Solve_ivp for all three step sizes` |
@@ -199,8 +209,8 @@ I forrige melding foreslo jeg endelser som `_boris`, `_rk4` og `_fosmm`. Jeg bru
 | `t_eval` | `t_eval_amanda` | `#Plotting the error over time for the RK4 met`; `#Plotting the error over time for both 2D pat`; `#Plotting the change in energy againt time` |
 | `t_span` | `t_span_amanda` | `#Plotting the error over time for the RK4 met` |
 | `time` | `time_amanda` | `# Parameters`; `# Parameters` |
-| `v0_2D` | `v0_2D_amanda` | `#2D charged particle`; `# Parameters`; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Plotting the change in energy againt time`; `#Paramaters` |
-| `x0_2D` | `x0_2D_amanda` | `#2D charged particle`; `# Parameters`; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Plotting the change in energy againt time`; `#Paramaters` |
+| `v0_2D` | `v0_2D_amanda` | `# 2D charged particle`; `# Parameters`; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Plotting the change in energy againt time`; `#Paramaters` |
+| `x0_2D` | `x0_2D_amanda` | `# 2D charged particle`; `# Parameters`; `#Testing for a shorter time interval because`; `#Plotting the error over time for the RK4 met`; `#Plotting the change in energy againt time`; `#Paramaters` |
 | `x3` | `x3_amanda` | `#Plotting the trajectories of the two first c` |
 
 ### Seline
@@ -208,6 +218,7 @@ I forrige melding foreslo jeg endelser som `_boris`, `_rk4` og `_fosmm`. Jeg bru
 | Gammelt navn | Nytt navn | Celler der navnet er endret (første linje i cellen) |
 |---|---|---|
 | `N` | `N_seline` | `def starting_values(y0, t_min, t_max, U_grad,`; `#runge kutte for å verifisere`; `t_span_seline = (0, T_max)`; `T_seline = 1e4`; `TRK = 1e4` |
+| `RK4` | `RK4_seline` | `#runge kutte for å verifisere`; `TRK = 1e4` |
 | `T` | `T_seline` | `T_seline = 1e4` |
 | `energy` | `energy_seline` | `def energy_seline(x, v, U):` |
 | `h` | `h_seline` | `def starting_values(y0, t_min, t_max, U_grad,`; `x01 = np.array([0.0, 1.0, 0.1])`; `#Tokamak`; `#runge kutte for å verifisere`; `t_span_seline = (0, T_max)`; `error1_RK = error(x1RK, sol_2D_seline.y[:3])`; `def energy_seline(x, v, U):`; `T_seline = 1e4`; `TRK = 1e4` |
@@ -218,9 +229,10 @@ I forrige melding foreslo jeg endelser som `_boris`, `_rk4` og `_fosmm`. Jeg bru
 | `x2` | `x2_seline` | `#Tokamak`; `plt.title("A: Trajectory in Tokamak magnetic `; `def error(x, xref):`; `def energy_seline(x, v, U):` |
 
 **Hvorfor:**
-- Modellfunksjonene og startverdiene (`B_2D`, `A_2D`, `U_2D`, `grad_U_2D`, `B_tokamak`, `A_tokamak`, `U_tokamak`, `grad_U_tokamak`, `x0_2D`, `v0_2D`) fantes både hos Emilie (numpy) og Amanda (JAX).
+- Modellfunksjonene og startverdiene (`B_2D`, `A_2D`, `U_2D`, `grad_U_2D`, `B_tokamak`, `A_tokamak`, `U_tokamak`, `grad_U_tokamak`, `x0_2D`, `v0_2D`) fantes både hos Emilie og hos Amanda.
 - `time`: Amanda brukte `time = np.linspace(...)`, som overskrev `time`-modulen som Emilies `boris_method` bruker til tidtaking. Bare *variabelen* er endret. `import time` og `import time as pytime` er som før.
-- `ODEs`: Emilie og Amanda hadde ulike funksjoner med samme navn: fem argumenter hos Emilie, og en JAX-versjon med fire argumenter hos Amanda.
+- `ODEs`: Emilie og Amanda hadde hver sin funksjon med samme navn, med fem og fire argumenter.
+- `RK4`: Amanda (ny versjon) og Seline hadde hver sin RK4-funksjon med samme navn og ulike argumenter.
 - `energy`: Amanda og Seline hadde ulike funksjoner med samme navn og ulike argumenter.
 - `sol_2D`: Amanda og Seline brukte samme navn på ulike referanseløsninger.
 - Parametre og hjelpevariabler (`T`, `h`, `h_i`, `N`, `t_eval`, `t_span`, `error_2D`, `initial_condition_2D`, `x1`, `x2`, `x3`) ble satt på nytt av flere personer med ulike verdier, og ville overskrevet hverandre etter sorteringen.
@@ -233,9 +245,9 @@ I forrige melding foreslo jeg endelser som `_boris`, `_rk4` og `_fosmm`. Jeg bru
 ## 5. Hvordan det er testet
 
 - En statisk sjekk av den nye rekkefølgen viser at ingen funksjon eller variabel brukes før den er definert.
-- Både den gamle og den nye notebooken ble kjørt med kortere sluttid T, slik at testen tok noen minutter i stedet for timer. Alle resultatvariabler (baner, feil, energi, referanseløsninger) er identiske for alle tre personene. Bare tidsmålingene varierer, som ventet.
-- Output i notebooken er fra deres tidligere kjøringer, og cellene er ikke kjørt på nytt. Kjøringsnumrene (`[12]` osv.) står derfor ikke i rekkefølge. Kjør gjerne hele notebooken på nytt fra toppen (*Run All*).
+- Emilies, Amandas (ny versjon) og Selines deler ble kjørt hver for seg, og den sorterte notebooken ble kjørt i sin helhet, alt med kortere sluttid T. Alle resultatvariabler (baner, feil, energi, referanseløsninger) er identiske. Bare tidsmålingene varierer, som ventet.
+- Output i notebooken er fra deres tidligere kjøringer, og cellene er ikke kjørt på nytt. Kjøringsnumrene står derfor ikke i rekkefølge. Kjør gjerne hele notebooken på nytt fra toppen (*Run All*).
 
 ## 6. Ikke gjort, ifølge valg A
 
-Funksjonene som er definert flere ganger, er *ikke* slått sammen. Det gjelder modellproblemene (tre versjoner), høyresiden av ODE-en (`ODEs_emilie`, `ODEs_amanda`, `ODEs_scipy` ×2, `ODE1`), referanseløsningene, energifunksjonene, Selines RK4 og Amandas doble work-precision-plott. Se forslagene i chatten, eller be om valg C.
+Funksjonene som er definert flere ganger, er *ikke* slått sammen. Det gjelder modellproblemene (tre versjoner), høyresiden av ODE-en (`ODEs_emilie`, `ODEs_amanda`, `ODE1`), referanseløsningene, energifunksjonene, de to RK4-implementeringene (`RK4_amanda` og `RK4_seline`) og Amandas doble work-precision-plott.
