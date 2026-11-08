@@ -296,3 +296,17 @@ I sammenligningsplottet FOSMM/RK4 er FOSMM-kurvene grønne og RK4-kurvene lilla.
 ## C. Testing
 
 Notebooken er kjørt med kortere sluttid T og sammenlignet med versjonen på `main`. 90 av 91 resultatvariabler er bitvis identiske. Den siste, `energy_change_boris_toko`, avviker med 8·10⁻²², som er ren avrunding.
+
+---
+
+# Task C: `TaskC` og `borisC` slått sammen i `main`
+
+- **Nytt:** cellene fra `TaskC` (RK4) og `borisC` (Boris) står etter hverandre under overskriften `# Task C`, med underoverskriftene `## Task C RK4 method` og `## Task C Boris method`. Output fra deres egne kjøringer er beholdt.
+- **Fjernet:** én tom kodecelle fra `TaskC`.
+- **Nye navn**, så Task C ikke overskriver variabler fra task A. Logikken er ikke endret:
+  - i RK4-delen: `R` → `R_RK4_C` og `x3` → `x3_RK4_C`
+  - i Boris-delen: `R_boris` → `R_boris_C` og `T` → `T_boris_C`
+- **To nye plottceller** under `## Task C: Sammenligning av RK4 og Boris`:
+  1. Baner i 2×2-rutenett: $(x_1, x_2)$ og $(R, x_3)$ for RK4 og Boris, som figur 6 i He mfl. (2015).
+  2. Relativ energifeil $(H_n - H_0)/|H_0|$ for RK4 og Boris i samme plott, og Boris alene ved siden av, som figur 7(a) og 7(b).
+- **Outputet til de nye cellene** er laget ved å kjøre bare definisjonscellene og Task C-cellene, ikke task A og B. Resultat: RK4 ender på −0.99 i relativ energifeil, og Boris holder seg under 8·10⁻¹⁴. Det stemmer med artikkelen.
