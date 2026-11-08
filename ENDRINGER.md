@@ -310,3 +310,50 @@ Notebooken er kjørt med kortere sluttid T og sammenlignet med versjonen på `ma
   1. Baner i 2×2-rutenett: $(x_1, x_2)$ og $(R, x_3)$ for RK4 og Boris, som figur 6 i He mfl. (2015).
   2. Relativ energifeil $(H_n - H_0)/|H_0|$ for RK4 og Boris i samme plott, og Boris alene ved siden av, som figur 7(a) og 7(b).
 - **Outputet til de nye cellene** er laget ved å kjøre bare definisjonscellene og Task C-cellene, ikke task A og B. Resultat: RK4 ender på −0.99 i relativ energifeil, og Boris holder seg under 8·10⁻¹⁴. Det stemmer med artikkelen.
+
+---
+
+# Branch `rydding-navn`: navn, felles parametre og figurnummer
+
+## Navn uten personnavn
+Alle variabler og funksjoner er nå oppkalt etter metode, modell eller oppgave. `_2D` og `_tok` står for modellen, og `_A`, `_B` og `_C` for oppgaven.
+
+| Før | Nå |
+|---|---|
+| `RK4_amanda`, `h_amanda`, `h_emilie`, `h_seline`, `N_emilie`, `N_seline` (inne i metodene) | `RK4_step`, `h`, `N` |
+| `x_array_boris`, `x_array_boris_toko`, `v_array_boris(_toko)` | `x_boris_2D`, `x_boris_tok`, `v_boris_2D`, `v_boris_tok` |
+| `x_arr_2D`, `x_arr_tokamak`, `y_arr_2D`, `y_arr_tokamak` | `x_RK4_2D`, `x_RK4_tok`, `y_RK4_2D`, `y_RK4_tok` |
+| `x1_seline`, `v1`, `x2_seline`, `v2` | `x_FOSMM_2D`, `v_FOSMM_2D`, `x_FOSMM_tok`, `v_FOSMM_tok` |
+| `R`, `x3_amanda`, `R_boris`, `z` | `R_RK4_tok`, `z_RK4_tok`, `R_boris_tok`, `z_boris_tok` |
+| `error_boris_2d`, `error_toko_boris`, `error_2D_amanda`, `error_tokamak`, `error1_FOSMM`, `error2_FOSMM` | `err_boris_2D`, `err_boris_tok`, `err_RK4_2D`, `err_RK4_tok`, `err_FOSMM_2D`, `err_FOSMM_tok` |
+| `energy_change_boris_2D/_toko`, `e_n_2D`, `e_n_tokamak` | `dE_boris_2D`, `dE_boris_tok`, `dE_RK4_2D`, `dE_RK4_tok` |
+| `initial_condition_2D_emilie/_amanda`, `initial_condition_toko/_tokamak`, `y01`, `y02` | `y0_2D`, `y0_tok`, `y0_FOSMM_2D`, `y0_FOSMM_tok` |
+| Task B: `error_2D_emilie_T1` … `T4`, `error_2D_RK4_T1` …, `e1`, `e2`, `t1`, `t2` | Lister med én oppføring per T: `err_boris_2D_B[k]`, `err_RK4_tok_B[k]`, `err_FOSMM_2D_B[k]`, `time_boris_2D_B[k]` osv., der `k` er indeksen i `T_B` |
+| Overskriftene `## Emilie (Boris)`, `## Amanda (RK4)`, `## Seline (FOSMM)` | `## Boris`, `## RK4`, `## FOSMM` |
+
+## Ett sett parametre per oppgave, i stedet for mange like
+- **Task A:** `T_A = 1e5`, `h_A = 0.1`, `N_A`, tidsaksen `t_A` (med `t_A_boris = t_A[1:]`) og startverdiene står i én ny celle øverst i task A. Disse er fjernet: `T_emilie`, `h_emilie`, `N_emilie`, `T_amanda`, `h_amanda`, `n_steps` (definert to ganger), `time_amanda`, `t_eval_amanda`, `T_max`, `h_seline`, `t_eval_seline` og `t_eval_emilie`.
+- **Task B:** `T_B = [1e4, 1e3, 1e2, 10]` og `h_B = [0.1, 0.05, 0.025]` står i én ny celle. Disse er fjernet: `T_emilie`, `T_RK4`, `T_seline_vals`, `h_i_emilie` (definert to ganger), `h_i_amanda` (definert to ganger), `h_arr` og `h_p`.
+
+## Én referanseløsning per modell i task A
+Før ble det regnet ut tre referanseløsninger per modell i task A, én for hver metode. Nå er det én: `sol_A_2D` og `sol_A_tok`, på tidsaksen `t_A`, med `rtol=1e-12` og `atol=1e-14`. Boris sammenlignes med `sol_A_*.y[:, 1:]`, fordi `boris_method` ikke lagrer $x_0$.
+
+**Merk:** Boris og RK4 brukte før `rtol=1e-10`. Nå bruker de samme, strengere toleranse som FOSMM. Feilverdiene i task A endrer seg derfor litt for Boris og RK4. I testen var det relative avviket mellom $10^{-8}$ og $10^{-4}$, og det er ikke synlig i plottene.
+
+## Fjernet fordi det var dobbelt
+- Cellene som kjørte RK4 for task B med T = 1e4 én gang til (`y_arr_2D_i`, `y_arr_tokamak_i`, `sol_2D_i`, `sol_tokamak_i`, `error_2D_i`, `error_tokamak_i`). Resultatene ble ikke brukt i noen plott, og `error_RK4_decrease` regner ut det samme.
+- Testkjøringen av `solve_ivp` på et kort intervall i task A.
+- Notatet «FIKS SÅ VI BRUKER SAMME ENERGIFUNKSJON …». Det er gjort: alle tre bruker `energy`.
+
+## Rettede feil
+- **Konvergensplottene i task B:** RK4-panelet viste Boris sine Tokamak-feil (`error_toka_T1` …) i stedet for RK4 sine (`error_toka_RK4_T1` …). Nå brukes `err_RK4_tok_B[k]`.
+- **Task C:** `t_eval_c_boris = np.arange(1, n_steps_C + 1)*h_C` i stedet for `np.linspace(0, T_C, n_steps_C)`, fordi `boris_method` lagrer posisjonene ved $t_1, \dots, t_N$.
+
+## Figurnummer
+Alle 26 figurer har fått «Figure N:» foran tittelen (`fig.suptitle` eller `plt.title`), nummerert i rekkefølge.
+
+## Testing
+Både den gamle (`main`) og den nye notebooken er kjørt med kortere tider. Alle baner, energier og alle resultater i task B og C er identiske, eller avviker bare med avrundingsfeil under $10^{-16}$ relativt. De eneste forskjellene er feilene i task A for Boris og RK4, som skyldes den nye referanseløsningen. Notebooken er ikke kjørt med fulle tider, så det meste av outputet er fra før. Cellene som er skrevet om eller lagt til, har ikke output før dere kjører dem.
+
+## Impulscellen (ikke endret, se forslag i chatten)
+Bare variabelnavnene er oppdatert. Logikken er som før, og cellen gir fortsatt feil.
